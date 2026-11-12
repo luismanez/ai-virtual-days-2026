@@ -56,7 +56,7 @@ export function ExpertActions({ expert, isDemo, compact, onOpenLink, introductio
         onClick={event => { lastTrigger.current = event.currentTarget; return contact(); }}>
         {compact ? undefined : opening ? 'Opening Teams…' : 'Chat in Teams'}
       </Button>
-      {!compact && <Button appearance="outline" icon={<CalendarLtr20Regular />} onClick={event => { lastTrigger.current = event.currentTarget; setDialog('schedule'); }}>Schedule</Button>}
+      {!compact && <Button appearance="outline" icon={<CalendarLtr20Regular />} onClick={event => { lastTrigger.current = event.currentTarget; setDialog('schedule'); }}></Button>}
       {!compact && introduction && <Button appearance="outline"
         icon={introducing ? <Spinner size="tiny" aria-hidden="true" /> : <Sparkle20Regular />}
         disabled={introduction.pendingExpertId !== undefined} aria-busy={introducing}
