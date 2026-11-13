@@ -6,6 +6,7 @@ function htmlText(html: string): string {
   const template = document.createElement('template');
   // Template contents remain inert and are never inserted into the document.
   template.innerHTML = html.replace(/<br\s*\/?\s*>/gi, '\n').replace(/<\/(?:p|div)>/gi, '\n');
+  template.content.querySelectorAll('head, style, script, title').forEach(element => element.remove());
   return (template.content.textContent || '').replace(/\r\n?/g, '\n').trim();
 }
 
@@ -40,8 +41,10 @@ export function inspectAgendaBody(body: AgendaBody): { agenda?: string; before: 
   const outside = before + after;
   const template = document.createElement('template');
   if (html) template.innerHTML = outside;
-  const links = html ? Array.from(template.content.querySelectorAll('[href]')).map(element => element.getAttribute('href')) : [];
-  return { agenda, before, after, signature: JSON.stringify([html ? htmlText(outside) : outside.trim(), links]) };
+  const links = html ? Array.from(template.content.querySelectorAll('a[href]')).map(element => element.getAttribute('href')) : [];
+  // Exchange can reformat HTML/CSS while retaining the notes and meeting links.
+  const text = (html ? htmlText(outside) : outside).replace(/\s+/g, ' ').trim();
+  return { agenda, before, after, signature: JSON.stringify([text, links]) };
 }
 
 export function mergeAgendaBody(body: AgendaBody, value: string): AgendaBody {

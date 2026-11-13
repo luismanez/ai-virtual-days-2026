@@ -16,8 +16,9 @@ const useStyles = makeStyles({
   actions: { display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '16px' }
 });
 
-export function MeetingAgendaReview({ input, service, onOpenLink }: {
+export function MeetingAgendaReview({ input, service, onOpenLink, inline, onContentResize }: {
   input: IPrepareMeetingAgendaProperties; service: GraphMeetingService; onOpenLink: (url: string) => Promise<void>;
+  inline: boolean; onContentResize: (width: number, height: number) => void;
 }): React.ReactElement {
   const styles = useStyles();
   const [meeting, setMeeting] = React.useState<MeetingAgenda>();
@@ -28,7 +29,26 @@ export function MeetingAgendaReview({ input, service, onOpenLink }: {
   const [checkedUnknown, setCheckedUnknown] = React.useState(false);
   const active = React.useRef(true);
   const busy = React.useRef(false);
+  const contentElement = React.useRef<HTMLElement | null>(null);
   React.useEffect(() => { active.current = true; return () => { active.current = false; }; }, []);
+  React.useEffect(() => {
+    const element = contentElement.current;
+    const view = element?.ownerDocument.defaultView;
+    if (!inline || !element || !view?.ResizeObserver) return;
+    let lastWidth = 0;
+    let lastHeight = 0;
+    const observer = new view.ResizeObserver(() => {
+      const rect = element.getBoundingClientRect();
+      const width = Math.ceil(rect.width);
+      const height = Math.ceil(rect.height);
+      if (width > 0 && height > 0 && (width !== lastWidth || height !== lastHeight)) {
+        lastWidth = width; lastHeight = height;
+        onContentResize(width, height);
+      }
+    });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [inline, onContentResize]);
   const { eventId, bookingId } = input;
   const load = React.useCallback((): Promise<void> => {
     if (busy.current) return Promise.resolve();
@@ -81,7 +101,7 @@ export function MeetingAgendaReview({ input, service, onOpenLink }: {
   const date = (value: string): string => new Date(value).toLocaleString(undefined, { timeZone: zone,
     year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 
-  return <section className={styles.root} aria-label="Meeting agenda">
+  return <section ref={contentElement} className={styles.root} aria-label="Meeting agenda">
     <h2 className={styles.title}>Review meeting agenda</h2>
     {phase === 'loading' && <Spinner label="Loading the meeting…" />}
     {meeting && <>

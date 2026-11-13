@@ -11,6 +11,12 @@ export default class PrepareMeetingAgendaCopilotComponent extends BaseCopilotCom
   private _root: Root | undefined;
   private _service: GraphMeetingService | undefined;
   private _inputKey: string | undefined;
+  private _disposed = false;
+
+  private _resizeInlineContent = (width: number, height: number): void => {
+    if (this._disposed || this.hostContext.displayMode !== 'inline') return;
+    this.requestSizeChangeAsync(width, height).catch(() => undefined);
+  };
 
   private _openLink = async (url: string): Promise<void> => {
     const result = await this.context.copilotBridge.openLinkAsync(url);
@@ -38,11 +44,13 @@ export default class PrepareMeetingAgendaCopilotComponent extends BaseCopilotCom
     this._root.render(<FluentProvider targetDocument={this.context.domElement.ownerDocument}
       theme={this.hostContext.theme === 'dark' ? teamsDarkTheme : teamsLightTheme}>
       {error || !input.success || !this._service ? <p role="alert">{error}</p>
-        : <MeetingAgendaReview key={key} input={{ ...input.data, agenda }} service={this._service} onOpenLink={this._openLink} />}
+        : <MeetingAgendaReview key={key} input={{ ...input.data, agenda }} service={this._service} onOpenLink={this._openLink}
+          inline={this.hostContext.displayMode === 'inline'} onContentResize={this._resizeInlineContent} />}
     </FluentProvider>);
   }
 
   protected onTeardown(): Promise<void> {
+    this._disposed = true;
     this._service?.dispose(); this._root?.unmount(); this._root = undefined;
     return Promise.resolve();
   }

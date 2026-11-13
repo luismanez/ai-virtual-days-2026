@@ -53,6 +53,8 @@ Build/package checks are local only. Real invitation delivery, self detection, T
 
 After a confirmed booking, **Prepare agenda with Copilot** shares the selected professional profile, event identity/time and original **Session objective / notes** with the existing conversation. Copilot generates an agenda and calls `PrepareMeetingAgendaTool`, which loads that event in an independent editable card. **Save agenda to meeting** explicitly updates the same invitation and may notify attendees. Generation/rendering alone never saves.
 
+The agenda card reports its natural inline size as its content changes. Save confirmation compares exact agenda content and the meeting's identity/Teams connection, plus preserved outside text/anchor links while ignoring HTML/CSS presentation whitespace. Ordinary HTML reformatting therefore does not require another Save; a genuinely uncertain outcome still offers Check save status without automatically repeating the write.
+
 New bookings carry an event-local marker and booking correlation; older unmarked events are ineligible. Saving reads the current body and preserves Notes/Teams information while adding or replacing one escaped agenda section. Unknown writes require a status check and Outlook inspection before another deliberate save. No additional permission, dependency or testing infrastructure was added. Runtime checks are left to the user after compilation; the known Introduce me host issue remains unverified.
 
 ## Session resources

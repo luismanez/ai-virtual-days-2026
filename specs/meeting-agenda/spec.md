@@ -85,6 +85,8 @@ The original entry owns Bridge operations. React calls `onPrepareMeetingAgenda({
 
 The second tool is a separate `BaseCopilotComponent` with its own root, host context, delegated `GraphMeetingService`, request guards and teardown. It initializes directly from validated tool properties and the authenticated event read. It does not rerun expert-directory source selection or depend on the Experts list, selected card or first service instance remaining mounted.
 
+In inline mode, observe the review section's natural size and notify the public frame-resize API when loading, editing/textarea resizing or save controls change its dimensions. Ignore unchanged/invalid sizes; disconnect on fullscreen/unmount and ignore disposed callbacks. Do not use a fixed height or depend on the first directory component's observer to size this independent card.
+
 ### Tool input
 
 `PrepareMeetingAgendaTool` means **render a draft for review**, never save or create. Its strict, required-property contract is:
@@ -210,6 +212,8 @@ If the current managed section already contains the intended normalized text, re
 **Concurrency assumption:** the event-update reference does not expressly specify `If-Match` behavior. Conditional-write enforcement is an expected service behavior to evaluate during final implementation verification, not a documented guarantee or a preliminary gate. Always re-read/merge and handle conflict responses, and never silently remove the conditional header after an error. Concurrent edits by another client between the read and PATCH remain a known risk if the service ignores it; there is no distributed lock or claim of atomic cross-instance editing.
 
 A successful Graph response is necessary evidence of an update, but the UI reports confirmed success only after validating the resulting event, using one bounded follow-up GET when needed. Verify the same ID/provenance, exactly one matching agenda section with the attempted text, retained pre-save non-agenda content and an intact Teams connection/join URL. Account for harmless HTML normalization rather than comparing the entire HTML string byte-for-byte. Do not expose the raw body in the UI. A malformed response or unconfirmed/mismatching verification remains **unknown**, without a second PATCH or an automatic undo.
+
+For the preservation comparison, exclude non-content head/style/script/title nodes, fold presentation whitespace and compare the remaining text plus anchor URLs in order. Continue copying the original outside markup during composition; normalization applies only to verification, not to the saved body. CSS/indentation changes alone must not force status-check/retry when the exact agenda, Notes, links and eligible event are verified. Changed Notes, anchor destinations or Teams join URL must still prevent a confirmed-save result.
 
 If a PATCH times out, returns an ambiguous transport/server outcome, or confirmation cannot be completed, retain the attempted text and the unknown-write guard. **Check save status** reads and revalidates the same event. A matching intact section confirms saved; a different/absent section does not prove an earlier request can never complete. Show the current result and require an explicit user decision after inspecting Outlook before unlocking another save. If another agenda is present, require Reload/review; never overwrite it automatically. Compare the fresh section again before any later explicit PATCH. This provides idempotent content, not an exactly-once transport/notification guarantee.
 

@@ -1,8 +1,16 @@
 # Package and install Expert Finder
 
+## Agenda frame and save confirmation
+
+The current release is solution **1.0.0.11**, retaining Teams app **1.0.7**. The independent agenda card now observes its natural content size and calls the public inline frame-resize API after loading, editing/resizing and save-state changes, following the already working directory approach. Fullscreen remains host-owned.
+
+The user reports that the first save updates the meeting, but confirmation and Check save status stay unknown until another explicit save finds the existing agenda. A minimal local reproduction matched that sequence: the old preservation signature included CSS and exact whitespace outside the agenda, so a reformatted HTML response failed confirmation while the identical-agenda shortcut succeeded. The signature now ignores non-content head/style/script/title text and folds presentation whitespace, while retaining non-agenda text and anchor URLs in order. Exact agenda text, meeting identity/provenance and the Teams join URL are still verified. This fixes the reproduced false negative; genuine unconfirmed reads/writes retain their existing status-check guard. The exact tenant response and the corrected host behavior have not been inspected here.
+
+Replace/enable the sppkg only; no additional **Add to Teams** sync is needed when app 1.0.7 is already installed. No tools, schemas, permissions or dependencies changed. Build results are recorded in `specs/tasks/todo.md`; the user will retry the frame and first-save behavior in Copilot.
+
 ## Next working day availability
 
-The current release is solution **1.0.0.10**, retaining Teams app **1.0.7**. Availability now offers **Today / Next working day**, skipping weekends and initially selecting the next working day from local 17:30 or on weekends. Each day keeps the existing 09:00–18:00 window and Morning/Afternoon navigation. This changes component code only; the agent baseline, tools, schemas and pinned catalog stay unchanged. Replace/enable the sppkg; no additional **Add to Teams** sync is required when app 1.0.7 is already installed. Build results are recorded in `specs/tasks/todo.md`; runtime booking checks remain with the user.
+The preceding release is solution **1.0.0.10**, retaining Teams app **1.0.7**. Availability offers **Today / Next working day**, skipping weekends and initially selecting the next working day from local 17:30 or on weekends. Each day keeps the existing 09:00–18:00 window and Morning/Afternoon navigation. This changes component code only; the agent baseline, tools, schemas and pinned catalog stay unchanged. Replace/enable the sppkg; no additional **Add to Teams** sync is required when app 1.0.7 is already installed. Build results are recorded in `specs/tasks/todo.md`; runtime booking checks remain with the user.
 
 ## Agenda tool catalog correction
 
