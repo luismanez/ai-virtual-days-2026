@@ -82,3 +82,42 @@ Use one sequential executor: the callback, root state and card props share files
 Risks worth checking for this demo: a stale/mixed profile (await the complete update before the follow-up and serialize clicks); oversized or instruction-like CV text (bounded serialized data, no silent shortening, explicit trust boundary); unsupported/rejected Workbench handoff (local error, no substitute generator); model question count/language or repeat search (drafting instructions plus deployed Copilot diagnostics). Bridge acknowledgement is not a returned draft or proof that the model finished. The existing instruction change requires a baseline re-sync after the separately directed deployment.
 
 The [single feature implementation prompt](../introduce-me/tasks.md#single-implementation-prompt) was executed for all authorized local tasks without per-task approval pauses. Implementation and production build/package checks are complete; Workbench/Copilot checks remain pending.
+
+## Meeting agenda
+
+Locally implemented extension (2026-11-13), build passed and user validation pending: [feature spec](../meeting-agenda/spec.md), [ten detailed tasks](../meeting-agenda/tasks.md) and the [implementation prompt](../meeting-agenda/tasks.md#single-implementation-prompt). Progress lives in [todo.md](todo.md#meeting-agenda--planned); earlier unfinished tasks/results remain intact. The user's latest instruction overrides broader checkpoint/manual verification: execution stopped after the existing build passed, leaving host/calendar checks to the user. No deployment or real-calendar operation was performed.
+
+### Architecture and dependency order
+
+Keep the original booking flow and stamp the event in its existing create POST. Reuse one creation/correlation UUID and the delegated GraphMeetingService for independent event authorization, latest-body reads, section replacement and confirmation. The second component owns its editor/save state and receives only strict `{ eventId, bookingId, agenda }` properties; it cannot depend on the original React/service instance. The original entry owns the ordered Bridge handoff, with a shared introduction/agenda guard. Agent rules separate search, introduction drafting and the agenda-tool route.
+
+Execute numerically with one sequential executor. The dependency column records the graph; shared Graph service, helper, root/props and registration files make concurrent editing unnecessary. AG-02/AG-03 and AG-04/AG-05 divide their service/consumer changes to keep each task within five authored files; together they produce the real review/save interactions. They are internal increments of one complete delivery, with no stubs or alternate demo path.
+
+| Order | Task | Depends on | Scope and authored size | Verification point |
+| --- | --- | --- | --- | --- |
+| 1 | [AG-01](../meeting-agenda/tasks.md#ag-01) | Existing confirmed booking | Event provenance and returned correlation, 3 files | Preserve one creation/transactionId and Busy/unknown guards |
+| 2 | [AG-02](../meeting-agenda/tasks.md#ag-02) | AG-01 | Authorized event read and strict tool schema, 4 files | Build; reject invalid/unmarked/wrong-organizer targets |
+| 3 | [AG-03](../meeting-agenda/tasks.md#ag-03) | AG-02 | Registered independent editable review card, 5 files | Invocation only reads; authoritative summary and teardown |
+| 4 | [AG-04](../meeting-agenda/tasks.md#ag-04) | AG-02 | Safe same-event save/status service, 3 files | Fresh body merge, escaping, version/conflict/unknown outcomes |
+| 5 | [AG-05](../meeting-agenda/tasks.md#ag-05) | AG-03, AG-04 | Explicit review-card save/recovery UI, 2 files | Build/package inspection; available card UI checks |
+| 6 | [AG-06](../meeting-agenda/tasks.md#ag-06) | AG-01, AG-02 | Minimal context, ordered Bridge and shared guard contract, 4 files | Exact IDs, byte budget, no generation/save claims |
+| 7 | [AG-07](../meeting-agenda/tasks.md#ag-07) | AG-05, AG-06 | Notes/confirmed-booking action through existing React hierarchy, 5 files | Eligibility, shared UI lock and request-only acknowledgement |
+| 8 | [AG-08](../meeting-agenda/tasks.md#ag-08) | AG-03, AG-07 | Scoped agent routing and descriptions, up to 3 files | Build; complete source path/schema/routing; actual host behavior still unverified |
+| 9 | [AG-09](../meeting-agenda/tasks.md#ag-09) | AG-05, AG-07, AG-08 | Usage/invocation/runbook/walkthrough docs, 4 files | Full final matrix and truthful known limitations |
+| 10 | [AG-10](../meeting-agenda/tasks.md#ag-10) | AG-01 through AG-09 | Normal local release, deployment notes and evidence, 4 authored files plus generated outputs | Final build/package and complete manual acceptance where authorized |
+
+Checkpoints after AG-02, AG-05, AG-08 and AG-10 cover source/build/package correctness and available observations. They do not require human approval or a working Copilot orchestration demonstration before continuing local development. Fix actual build failures before dependent edits; record missing host/tenant authority separately and finish independent local work. No new automated tests, libraries, coverage or CI are added.
+
+### Final acceptance and risks
+
+The final matrix in [the spec](../meeting-agenda/spec.md#verification-criteria-after-implementation) evaluates the real complete journey: original meeting creation, exact second-tool identifiers plus generated content, independent review/edit, confirmed save in the same event, preserved Notes/Teams connection, conversation continuity and no duplicate invitations. `AG-*` tasks are distinct from the spec's `MA-*` acceptance IDs; the task file maps coverage. Checkpoint/build success alone does not satisfy conversational or calendar acceptance.
+
+| Risk | Planned handling |
+| --- | --- |
+| Copilot may refuse, choose the wrong/no tool, mix context or block subsequent chat | Ordered minimal context, explicit correlation/routing, shared handoff lock and final deployed-conversation checks. Preserve the unresolved Introduce me evidence/unknown cause. Accepted risk; no feasibility phase or alternative transport. |
+| A model supplies an unrelated event ID or forged correlation | Service reads `/me/events` with fixed queries and validates actual organizer, persisted application provenance, expert and interval; no title-only or model-only trust. |
+| A body update removes Notes/Teams data or duplicates agenda | Read current Text/HTML body, replace one bounded escaped section, preserve unrelated content, validate result and use read-only unknown-status recovery. |
+| Concurrent edits or lost write responses | Re-read/merge, conditional ETag write, conflict handling and explicit status/review actions; no automatic ambiguous PATCH retry or exactly-once guarantee. `If-Match` enforcement remains the spec's service assumption to observe after implementation. |
+| Old agent/package or unavailable permissions/host | Existing version/history/single-ZIP conventions and baseline-sync guidance; real tenant update and meeting operations need separate direction. Effective `Calendars.ReadWrite`, privacy configuration and host outcomes remain unverified here. |
+
+No product decision is missing. The accepted spec supplies behavior/limits; implementation-time service/host observations are recorded honestly without reopening the decision to implement the full feature. Revert through Git remains the agreed fallback for an unsuccessful final result, not an added deployment mechanism.

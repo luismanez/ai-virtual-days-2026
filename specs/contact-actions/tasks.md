@@ -6,7 +6,7 @@ Commands run from `src/copilot-expert-finder`. File paths below are relative to 
 
 **Implement honest contact actions**
 
-Build safe encoded Teams links for verified live UPNs and Fluent controls for both views. In mock mode contact previews are labeled; Schedule is a labeled demo dialog.
+Build safe encoded Teams links for verified live UPNs and Fluent controls for both views. In mock mode contact previews are labeled. The Schedule preview was removed by the 2026-11-13 scope update; do not restore its button or dialog.
 
 - Acceptance: The fixed Teams destination cannot become an arbitrary URL; unavailable identity and rejected host actions are explained. Dialogs close correctly and return focus.
 - Verification: Inspect generated links, use the mock dialogs in the UI, and verify real navigation only with a configured tenant user.

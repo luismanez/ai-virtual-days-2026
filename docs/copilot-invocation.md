@@ -1,5 +1,15 @@
 # Copilot invocation checklist
 
+## Meeting agenda route
+
+The current follow-up is deliberately short and visible: it requests an agenda/review component and includes the exact booking identifiers; generation rules are in the agent definition. Agenda preparation must produce an actual `PrepareMeetingAgendaTool` call, not a chat-only "prepared for review" acknowledgement. To inspect tool choice where the client supports it, send `-developer on`, start a new conversation and open **Agent debug info** beneath the response; compare **Actions** with **Executed actions**. A successful call without a rendered card requires different investigation from a turn with no call.
+
+The user's 2026-11-13 raw diagnostics for agent `1.0.6.1` show zero matched candidates, selected functions or executions, despite both component definitions being present in the downloaded deployed sppkg. Solution `1.0.0.9` switches to the installed generator's `toolDiscovery: "static"` fallback, which includes both function definitions and their UI metadata in the generated agent package. There is no hand-authored duplicate schema or new endpoint. Update/sync the baseline and check the new app version before retrying in a fresh conversation. Future tool/schema changes require a new baseline sync while this catalog is pinned. Actual selection/rendering remains a user acceptance check; the underlying cause of the empty dynamic candidate set is not established.
+
+In the updated agent, book through a real expert's future Free slot, optionally enter **Session objective / notes**, confirm creation, then choose **Prepare agenda with Copilot**. Expected final behavior: a context update followed by a user-role follow-up, then `PrepareMeetingAgendaTool` with the exact created `eventId`, its `bookingId` and nonempty generated `agenda`. The independent card loads authoritative event details, accepts edits and saves only on **Save agenda to meeting**. Saving may send meeting-update notifications.
+
+For later user verification, check English/Spanish content, blocks totaling 30 minutes, three relevant questions, unchanged event identity/Notes/Teams connection and a single agenda section after repeated saves. Try ordinary chat and a new expert search afterwards. Introduce me remains draft-only; acknowledgement does not prove generation or saving. Workbench injection does not prove natural routing. The previously documented refusal/blocked conversation has not been declared fixed.
+
 Workbench injects arguments directly. It verifies the UI/argument path, not natural tool selection. Actual Copilot selection requires the installed/synced agent and a new conversation. Counts below apply when the root Experts list returns HTTP 404 and mock data is selected. If the list exists, use its actual rows/counts instead.
 
 | Prompt | Expected behavior |

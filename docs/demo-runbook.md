@@ -1,12 +1,16 @@
 # Expert Finder: conference opening demo
 
+## Meeting agenda segment
+
+With an authorized controlled expert, use a future Free slot, enter a concrete session objective and explicitly create the Teams meeting. Choose **Prepare agenda with Copilot**, then explain that the follow-up lets the agent generate content and choose a second tool. Review/edit the resulting agenda card and explicitly choose **Save agenda to meeting**; this can notify attendees. Open Outlook to show the same event with original Notes, Teams connection and one agenda section. A generation failure leaves the booking intact; never create a replacement meeting to recover. This segment has not been rehearsed by the implementation agent.
+
 Allow about 3-4 minutes. Open the deployed agent in advance, check the selected data source and local portrait loading, and keep a fresh conversation ready. Source selection is automatic: Experts in the tenant root selects SharePoint; HTTP 404 selects fictional Demo data. The counts, names and filter examples below assume the mock collection. For that rehearsal, use a controlled tenant without the root Experts list; if it exists, adapt the script to its real rows and match the narration to the source label.
 
 1. Ask: **Who can help me with SPFx?** Copilot selects the tool and supplies the context. Mock mode returns six records; three appear inline.
 2. Point out the photo, name, job title and Teams action. Open a mock contact preview and explain that live mode opens a Teams draft chat for the selected tenant person, without sending anything.
 3. Choose **Open in fullscreen**. Highlight the fixed SPFx badge and detailed cards.
 4. Enter **Al** in Search by name. Select **Digital Workplace** and **Senior M365 Developer**. Alex remains. Clear filters to restore the original skill results. Explain that these interactions are local React state, not another LLM call or data retrieval.
-5. Open **Schedule**. The dialog explicitly states that no meeting has been created; it demonstrates where a richer interaction could go.
+5. Point out **Check availability** as the entry to real booking; the obsolete Schedule preview is no longer present. Mock profiles have no live calendar.
 6. Use the host's light/dark control and, if useful, collapse/reopen to show retained local state.
 7. Ask a new question for **databases**: one mock expert. Ask about **Spanish**: no matches. This demonstrates a new skill invocation, not an in-app skill selector.
 
@@ -22,7 +26,7 @@ This segment needs SharePoint mode and a non-family demo expert with a valid Per
 2. Explain **Today · 09:00–18:00**, the viewing time zone and the legend. Use the arrows between Morning (09:00–14:00) and Afternoon (14:00–18:00). Larger blocks show their start time and status; narrow cards use two rows. These arrows reuse the loaded day without calling Graph. The initial period follows the local hour, and Refresh preserves the selection. This is calendar free/busy; it does not indicate Teams presence.
 3. Choose **Refresh** for a new read. Switching to another expert replaces the panel and ignores the previous response if it arrives late. Filters and ordinary host re-renders do not poll calendars.
 4. Optionally select a controlled mailbox-free user to show the honest unavailable state. In mock mode the panel explains that fictional profiles have no calendar; it does not invent a timeline.
-5. Keep **Schedule** as the existing preview. To demonstrate actual booking, use the separate flow below; merely opening availability or the Schedule preview sends no invitation.
+5. To demonstrate actual booking, use the separate flow below; merely opening availability sends no invitation.
 
 Manual rehearsal: check light/dark and narrow cards, keyboard slot tooltips, current-slot boundaries, duplicate clicks and A→B while pending. Compare local/UTC payload alignment for winter, summer and the Europe/Madrid transition dates 2026-03-29 / 2026-10-25 using browser time-zone inspection rather than adding date navigation. Record actual results and leave unavailable permission/mailbox/error scenarios pending. If live availability is unavailable on stage, retain the rest of Expert Finder and explain the calendar state instead of showing simulated free time.
 
@@ -41,7 +45,7 @@ Manual acceptance still required: self detection, future-slot boundaries, Cancel
 
 Use the agent release with the updated drafting instructions synced to Copilot. Either a real expert or a visibly fictional mock profile can demonstrate this flow; it requires no new Graph permission or mailbox.
 
-1. Ask for experts, expand and point to **Introduce me** beside Chat in Teams and Schedule.
+1. Ask for experts, expand and point to **Introduce me** beside Chat in Teams.
 2. Choose one expert. Show the brief **Requesting draft…** state. The component shares a bounded snapshot of that profile through `updateModelContextAsync`, then asks for a draft through `sendFollowUpMessageAsync`.
 3. Read the draft in the Copilot conversation. Check the selected name, first-person introduction and exactly three practical questions about the skill, grounded in the visible profile. Explain that the user reviews/copies the text; this action sends nothing to Teams.
 4. Optionally choose a different expert after the handoff finishes: the next request replaces the profile context. Demonstrate that filters and fullscreen changes remain local interactions rather than automatic follow-ups.

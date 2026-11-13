@@ -16,16 +16,19 @@ This is a community conference demo. Keep the implementation easy to explain, at
 | Feature | Scope | Depends on | Files |
 |---|---|---|---|
 | expert-data | Skill, model, mock service, fictional data and local portraits | none | [Spec](expert-data/spec.md), [Tasks](expert-data/tasks.md) |
-| contact-actions | Teams action and clearly simulated Schedule | expert-data | [Spec](contact-actions/spec.md), [Tasks](contact-actions/tasks.md) |
+| contact-actions | Teams contact with fictional-profile preview and link error feedback | expert-data | [Spec](contact-actions/spec.md), [Tasks](contact-actions/tasks.md) |
 | inline-experience | Input seam, host shell, compact results and states | expert-data, contact-actions | [Spec](inline-experience/spec.md), [Tasks](inline-experience/tasks.md) |
 | fullscreen-experience | Search, filters and responsive expert cards | inline-experience | [Spec](fullscreen-experience/spec.md), [Tasks](fullscreen-experience/tasks.md) |
 | copilot-integration | Tool descriptions, agent instructions and starters | inline-experience | [Spec](copilot-integration/spec.md), [Tasks](copilot-integration/tasks.md) |
 | sharepoint-integration | Experts list guide, filtered REST provider and identity/photos | expert-data, inline-experience | [Spec](sharepoint-integration/spec.md), [Tasks](sharepoint-integration/tasks.md) |
 | expert-availability | On-demand fullscreen calendar free/busy panel for one selected expert | sharepoint-integration, fullscreen-experience, existing Graph infrastructure | [Spec](expert-availability/spec.md), [Tasks](expert-availability/tasks.md) |
 | introduce-me | Fullscreen selected-profile context and a user-triggered introduction draft in Copilot chat (implemented locally; host acceptance pending) | fullscreen-experience, copilot-integration, public Copilot Bridge | [Spec](introduce-me/spec.md), [Tasks](introduce-me/tasks.md) |
+| meeting-agenda | Copilot-generated agenda reviewed in an independent component and explicitly saved to the existing meeting (local build passed; user validation pending) | expert-availability booking, copilot-integration, public Copilot Bridge | [Spec](meeting-agenda/spec.md), [Tasks](meeting-agenda/tasks.md) |
 | demo-readiness | Package, installation notes, demo script and fallback | all above | [Spec](demo-readiness/spec.md), [Tasks](demo-readiness/tasks.md) |
 
 Introduce me is implemented locally; actual host checks remain pending. Its [feature-specific implementation prompt](introduce-me/tasks.md#single-implementation-prompt) selects this work without reopening the baseline implementation.
+
+Meeting agenda follows [ten tasks](meeting-agenda/tasks.md) and its [feature-specific implementation prompt](meeting-agenda/tasks.md#single-implementation-prompt). The user requested local implementation on 2026-11-13 with verification stopping at a successful build; runtime/tenant checks are left to the user. Existing unfinished tasks and their evidence remain intact.
 
 All detailed task definitions live with their feature. Completion status and observed results live only in tasks/todo.md. The latest written requirements take priority over earlier requirements and over extra details in the promotional mockup. These specs apply only to `src/copilot-expert-finder`; Hello Copilot is outside scope.
 

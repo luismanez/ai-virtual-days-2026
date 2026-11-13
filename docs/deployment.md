@@ -1,5 +1,50 @@
 # Package and install Expert Finder
 
+## Agenda tool catalog correction
+
+The current release is solution **1.0.0.9** and generated Teams app **1.0.7**. The user's raw debug info for agent `1.0.6.1` has empty `matchedFunctionCandidates`, `functionsSelectedForInvocation` and `functionExecutions`. A read-only download confirmed that deployed solution `1.0.0.8` contains both tools and matches the local package. This places the observed failure before component execution; it does not establish the underlying Microsoft service cause. A direct MCP `tools/list` request returned 404 and could not verify discovery.
+
+This release selects the installed SPFx generator's `toolDiscovery: "static"` fallback in `config/copilot-agent.json`. The generator derives both `functions` and `mcp_tool_description.tools` from the existing component manifests/schemas, with explicit `run_for_functions` entries. The MCP endpoint, component IDs, tools, arguments, instructions and calendar behavior stay the same. No catalog is maintained by hand. This is a deployment correction to test, not a confirmed host fix. Replace/enable the sppkg, run **Add to Teams** to synchronize the changed baseline, verify app **1.0.7** or its generated hotfix version, then start a new conversation. With the pinned catalog, future tool/schema changes also require a baseline update/sync.
+
+The downloaded `1.0.0.8` package also contained development hot-update files and unhashed bundles from shared watch/build output. The new production package was built in an isolated source copy using the existing dependencies/version history. `npm run build` passed, including the installed package validators; archive inspection confirmed both generated functions/UI definitions, one embedded agent ZIP and no development assets. Clean artifacts and version history were copied to the normal project paths. A stable copy is also at `/private/tmp/expert-finder-1.0.0.9.sppkg`. Stop the development server before future production builds in the normal project folder; otherwise it can repopulate the shared staging folders. Use the supplied release artifact directly instead of rebuilding while `npm start` is running. No deployment/sync, permission change, live tool invocation or calendar write was performed.
+
+## Agenda routing correction
+
+The preceding release is solution **1.0.0.8** and authored Teams app **1.0.6** (deployed as **1.0.6.1**). It shortened the visible agenda follow-up, strengthened intent-based tool routing/descriptions and prohibited invented card/draft completion acknowledgements. It retained dynamic discovery. The subsequent raw diagnostics above show that this did not resolve the agenda invocation.
+
+## Inline content height update
+
+The preceding component-only release is solution **1.0.0.7**, retaining Teams app **1.0.5** and all identities. It explicitly reports inline content-size changes to the host after asynchronous results/layout updates. That change alone needed no new Add to Teams synchronization; the later agenda releases above do change the baseline. The user has confirmed that the inline height issue is resolved.
+
+## Schedule preview removal
+
+The preceding release uses solution **1.0.0.6** and Teams app **1.0.5**. It removes the obsolete Schedule preview button, its dialog state/content and the corresponding agent instruction. Real booking through Check availability is unchanged. App/solution/component IDs and schema versions are preserved. Because that baseline instruction changed, update/sync the agent if Teams app 1.0.5 has not yet been published. Earlier release/audit entries below describe their original versions.
+
+## Meeting agenda release
+
+The initial agenda release used solution `1.0.0.5` and authored app `1.0.4`, preserving existing identities/history and adding a separate agenda component. After the normal package upload/enable step, synchronize the baseline agent again because instructions/descriptions changed. It originally used dynamic discovery; the later release above selects the generator's catalog fallback after the user's failed host invocation. No deployment/synchronization or live calendar action was performed by this implementation. Per the user's request, verification stops when the existing build passes; host/calendar checks are left to the user. The Introduce me host refusal remains unresolved.
+
+## Add to Teams package audit (2026-11-13)
+
+The reported failure occurs after SharePoint upload/enable succeeds. The local artifact audit found no duplicate agent ZIP or inconsistent release identity/version:
+
+| Artifact | Verified contents/version |
+| --- | --- |
+| `sharepoint/solution/copilot-expert-finder.sppkg` | CRC valid, no duplicate ZIP entries; solution ID `aa4326b3-eeff-4ca7-8f74-f695935a8bbb`, version `1.0.0.5`; exactly two Copilot component definitions and one `ClientSideAssets/expert-finder.zip`. |
+| Embedded agent ZIP | Byte-identical to `teams/expert-finder.zip`; CRC valid; exactly `manifest.json`, `declarativeAgent.json`, `ai-plugin.json`, `color.png`, `outline.png`. No obsolete ZIP, source, build-state or validation file is embedded. |
+| Teams app manifest | Existing app ID `9b076d6a-9c80-4c1d-ae8b-83dd4c3184f0`, version `1.0.4`, advanced from the previous tracked `1.0.3`. Source, generated ZIP and embedded ZIP agree. |
+| Version state | `teams/.copilot-agent-hotfix.json` records authored/shipped `1.0.4` and is not in the archives. The component/npm version `0.0.1`, app release version and solution release version are separate fields; they need not match numerically. Schema versions remain Teams `1.29`, declarative agent `v1.8`, plugin `v2.4`. |
+
+All three agent JSON manifests passed the installed Microsoft schema validator; the plugin was validated with a resolved URL in a temporary copy, preserving the normal source/package placeholder. The instructions contain 4,747 characters. Packaged icons match the source at 192×192 and 32×32. The app contains no Teams tabs, bot or compose extension; two Copilot components alone do not establish the documented combined Copilot/Teams sync limitation. The remaining outer-package JavaScript, localization, mock portraits/logo, license notices and SharePoint XML are used resources or packaging metadata, not obsolete apps.
+
+No application/configuration/version change or rebuild was justified by these findings. They do not prove that the version currently installed in the tenant is older: a read-only CLI lookup failed because the existing connection lacks an app-catalog read scope. No permissions were granted or tenant writes attempted.
+
+To identify the generic error, inspect the failed **SyncSolutionToTeams** request in the app catalog browser's Network tab and retain its status/response/correlation information, excluding credentials. Microsoft specifically documents that the generic message can hide a nested **409 Conflict** caused by an already deployed app ID/version. If the deployed app is already `1.0.4` or later, compare that actual version before preparing a higher-version release; do not change IDs or schema versions to bypass the conflict. See [Add to Teams fails](https://learn.microsoft.com/en-us/sharepoint/dev/spfx/copilot/troubleshooting-copilot-ux-components#add-to-teams-fails).
+
+A tenant-bound manual-update copy is ready at `/private/tmp/expert-finder-inheritscloud-1.0.4.zip`, outside `teams/` so it cannot be accidentally embedded in a later sppkg. It has the same five files, ID/version/instructions/icons; only the MCP URL is resolved to the documented conference tenant/solution. Use the existing app's **Upload file** route only when its deployed version permits this update, following [the manual update route](#manual-agent-update-fallback). The regular ZIP intentionally retains `{{TENANT_MCP_URL}}` for SharePoint to resolve. No successful tenant update or root cause is claimed from the local audit.
+
+**Subsequent user evidence:** a new `SyncSolutionToTeams` attempt returned HTTP **200** with `{"@odata.context":"…#Edm.Int32","value":1}`. That attempt no longer reports the earlier synchronization error; [PnP Framework's implementation](https://github.com/pnp/pnpframework/blob/dev/src/lib/PnP.Framework/ALM/AppManager.cs) treats a successful HTTP status with a response body as a successful sync call. The exact integer result is not an app version. Confirmation of catalog version `1.0.4` and availability in a fresh Copilot conversation remain user checks; the cause of the earlier intermittent failure is unknown. No package/version change is justified by this successful response alone.
+
 ## Build locally
 
 Run from src/copilot-expert-finder:
@@ -51,7 +96,7 @@ If upgrading an already deployed package, increase the solution/package version 
 
 The initial Introduce me release uses app version `1.0.3` and SharePoint solution version `1.0.0.3`, retaining the existing IDs, icons and single generated agent ZIP. This release changes the agent's drafting instructions as well as the UI, so replace/enable the sppkg and select **Add to Teams** again. Keep the existing agent in Copilot, allow propagation, reload and start a new conversation.
 
-The current local solution `1.0.0.4` is a component-only retry: its model-context label contains no behavioral directives. Agent `1.0.3` and its instructions are unchanged. If that agent version is already synchronized, replace/enable the sppkg and test in a new conversation without another Add to Teams. The reported conversation block is still under investigation; see the [recorded comparison and retry](copilot-invocation.md#investigating-the-rejected-follow-up).
+The earlier solution `1.0.0.4` was a component-only retry: its model-context label contains no behavioral directives. Agent `1.0.3` and its instructions were unchanged for that retry. If that agent version was already synchronized, that release only required replacing/enabling the sppkg. The later meeting-agenda release changes the baseline and requires the update described above. The reported conversation block is still under investigation; see the [recorded comparison and retry](copilot-invocation.md#investigating-the-rejected-follow-up).
 
 Search for a supported skill, open fullscreen and choose **Introduce me**. Validate that Copilot receives only the selected profile and produces the draft in the conversation with exactly three questions, without another search or external message. Use the [invocation checks](copilot-invocation.md#introduce-me-contextual-drafting) and [demo segment](demo-runbook.md#introduce-me-segment). No additional Graph consent is required for the action. Workbench can show local UI/errors; only deployed Copilot verifies the conversation result.
 

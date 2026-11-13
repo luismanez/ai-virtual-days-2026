@@ -2,6 +2,8 @@
 
 The baseline, Graph photos and expert availability are implemented locally. User-provided Copilot screenshots now confirm basic deployed invocation/rendering, profile images and an availability timeline in dark theme; broader external acceptance remains pending. Checked tasks have evidence below. Tasks needing additional Workbench, tenant or dialog interaction remain unchecked until those specific checks are verified; their code can already be implemented. No automated test suites are being added.
 
+Meeting agenda source is implemented locally (2026-11-13); the production build/package passed. Execution stopped there as requested; the user will verify host/calendar behavior. Earlier baseline check marks do not verify this feature's runtime acceptance.
+
 ## Skill scoped mock data
 
 - [x] **DAT-01** — [Define skill and domain contracts](../expert-data/tasks.md#dat-01)
@@ -63,6 +65,25 @@ The baseline, Graph photos and expert availability are implemented locally. User
 - [ ] **IM-02** — [Add the fullscreen action and shared pending/error feedback](../introduce-me/tasks.md#im-02) — UI and shared guard implemented; build passes. Workbench themes, keyboard, rapid-click and failure behavior pending.
 - [ ] **IM-03** — [Teach the agent to draft without another search](../introduce-me/tasks.md#im-03) — Instructions and documentation updated. Real Copilot draft, language, question count, selected context and routing pending.
 - [ ] **IM-04** — [Package and record actual demo validation](../introduce-me/tasks.md#im-04) — Local production package and version checks pass. Deployed-host acceptance pending; no tenant changes performed.
+
+## Meeting agenda — planned
+
+Local source/docs are implemented and compilation/packaging passed. Task/checkpoint boxes below retain their complete acceptance meaning and are not automatically checked from source/build work alone. Per the latest request, intermediate/rehearsal checks were not executed; remaining host checks belong to the user.
+
+- [ ] **AG-01** — [Retain verifiable provenance on confirmed bookings](../meeting-agenda/tasks.md#ag-01).
+- [ ] **AG-02** — [Read only an authorized ExpertFinder event for agenda review](../meeting-agenda/tasks.md#ag-02).
+- [ ] **Checkpoint after AG-02** — [Build and inspect provenance, event-read boundaries and schema](../meeting-agenda/tasks.md#checkpoint-after-ag-02); no preliminary live feasibility check.
+- [ ] **AG-03** — [Render an independent event-backed agenda review card](../meeting-agenda/tasks.md#ag-03).
+- [ ] **AG-04** — [Update only the managed agenda section in the same event](../meeting-agenda/tasks.md#ag-04).
+- [ ] **AG-05** — [Save a reviewed draft with truthful result and recovery states](../meeting-agenda/tasks.md#ag-05).
+- [ ] **Checkpoint after AG-05** — [Build/package and inspect the explicit card save/recovery path](../meeting-agenda/tasks.md#checkpoint-after-ag-05); record available UI evidence and pending tenant checks separately.
+- [ ] **AG-06** — [Publish the confirmed meeting context through the ordered Bridge handoff](../meeting-agenda/tasks.md#ag-06).
+- [ ] **AG-07** — [Offer agenda preparation after confirmed meeting creation](../meeting-agenda/tasks.md#ag-07).
+- [ ] **AG-08** — [Route agenda preparation to the second tool without changing Introduce me](../meeting-agenda/tasks.md#ag-08).
+- [ ] **Checkpoint after AG-08** — [Build and inspect the complete local path and agent routing](../meeting-agenda/tasks.md#checkpoint-after-ag-08); no per-task approval pause or required orchestration proof.
+- [ ] **AG-09** — [Document the complete conference journey and its limits](../meeting-agenda/tasks.md#ag-09).
+- [ ] **AG-10** — [Package the implementation and record full-journey verification](../meeting-agenda/tasks.md#ag-10).
+- [ ] **Final checkpoint** — [Verify complete feature acceptance](../meeting-agenda/spec.md#verification-criteria-after-implementation): one actual creation, exact event/booking IDs and nonempty agenda in the second tool, edit, confirmed same-event save, original Notes/Teams preserved, no duplicates and continued conversation; real tenant/calendar actions require the corresponding later direction.
 
 ## Final practical checks
 
@@ -170,3 +191,51 @@ The user approved the demo convention: Experts is in the tenant root. Selection 
 - Prepared one controlled component-only change: the context prefix is now a descriptive untrusted-data label without behavioral directives. The five profile fields and purpose/fictional metadata, 9,000-byte guard, full follow-up text, agent instructions, shared concurrency guard, ordered public Bridge calls, cancellation and existing features remain unchanged. No additional close call, delay, retry, dependency, permission or unit test was added.
 - npm run build exited 0 without TypeScript/lint warnings or errors; the existing Jest stage found zero tests. ZIP/sppkg CRC checks pass; solution 1.0.0.4 contains one agent ZIP whose entry contents exactly match the prior agent 1.0.3. The compiled bundle contains the new context label and excludes the removed directive. This retry needs only replacing/enabling the sppkg if agent 1.0.3 is already synchronized. No tenant action, live Bridge call or browser automation was performed by the assistant.
 - Actual draft generation and continued input in a fresh deployed conversation remain pending. This candidate is not a confirmed fix. Updated the invocation/deployment guide and walkthrough to record the comparison and controlled retry; previous host acceptance checkboxes remain open.
+
+### Meeting agenda development planning (2026-11-12)
+
+- Added ten implementation tasks, their dependency/file-size/acceptance mapping, four technical/final checkpoints and a feature-specific future implementation prompt. Extended the existing plan/index/checklist in place without resetting earlier incomplete tasks or evidence. `AG-*` task IDs are separate from the feature spec's `MA-*` acceptance IDs.
+- Scope covers the complete booking-to-Copilot-to-independent-review-to-confirmed-save journey, using event provenance, minimal context, scoped agent routing, body/Teams preservation, explicit save/status recovery and final conversation/regression checks. No spike, preliminary tool-invocation proof, partial-delivery decision or approval checkpoint was introduced.
+- Planning only: no application/agent/config code, versions or generated packages changed; no build, Bridge call, tenant change, deployment or real calendar/message operation performed. All agenda implementation/checkpoint entries remain unchecked; previously reported host limitations and unperformed tenant checks remain unresolved.
+
+### Meeting agenda local implementation (2026-11-13)
+
+- Implemented event-local provenance/correlation, authorized agenda reads, independent `PrepareMeetingAgendaTool` review editor, explicit body-only save with preservation/conflict/unknown-status handling, and the confirmed-booking action with a shared ordered Bridge guard. Added scoped agent routing and concise usage/release notes. Reused existing dependencies and delegated permissions.
+- Final `npm run build` exited 0 without TypeScript/lint warnings or errors; the existing test stage found zero tests. Both component manifests/bundles and dynamic tool discovery were included; the build generated `teams/expert-finder.zip` (app 1.0.4) and `sharepoint/solution/copilot-expert-finder.sppkg` (solution 1.0.0.5). Initial lint/ESM schema-loading and Promise-library compatibility failures were fixed without suppressions or compiler/dependency changes.
+- Stopped after the successful build per the latest user instruction. No new testing files/infrastructure, extra package checks, browser/Workbench/Copilot checks, deployment/sync, consent change or real-calendar/message operation. Full functional/manual task acceptance stays pending for the user, including the known host conversation issue and conditional-write/body-normalization assumptions.
+
+### Add to Teams artifact audit (2026-11-13)
+
+- At the user's request, inspected the actual sppkg and nested agent ZIP after the reported generic Add to Teams failure. Both archives pass CRC checks with no duplicate entries; the sppkg contains exactly one agent ZIP, byte-identical to `teams/expert-finder.zip`, and two intended Copilot components. The agent contains only its three manifests and two icons; the version-history sidecar is not packaged.
+- Confirmed stable solution/app IDs, solution `1.0.0.5`, app `1.0.4` (previous tracked app `1.0.3`), matching source/generated/embedded manifests and version history. All three JSON manifests pass the installed Microsoft validator with the MCP placeholder resolved only in a temporary validation copy. No speculative version/ID/schema changes or rebuild were made.
+- Read-only Teams catalog lookup could not establish the deployed version because the existing CLI grant lacks an app-catalog read scope. No permission or tenant change was performed. The actual SyncSolutionToTeams response is still needed to distinguish a version conflict from another synchronization error; the generic message is not a proven packaging fault.
+- Prepared `/private/tmp/expert-finder-inheritscloud-1.0.4.zip` for the already documented manual update route, retaining five files and changing only the tenant MCP URL. It stays outside `teams/` to avoid reintroducing duplicate ZIP packaging. Deployment guidance records findings, version caveats and the response needed for further diagnosis; host/calendar acceptance remains pending.
+
+- Subsequent user evidence: a new SyncSolutionToTeams attempt returned HTTP 200 and integer `value: 1`, without an error payload. This supports successful completion of that sync call; visibility/version `1.0.4` in the catalog and a fresh Copilot conversation have not yet been observed. The earlier failure's cause remains unknown; no further version/package change was made.
+
+### Remove obsolete Schedule preview (2026-11-13)
+
+- At the user's request, removed the Schedule icon button, its `schedule` dialog state, preview title/content and unused icon import from ExpertActions. Teams contact and its preview/error dialogs, Introduce me, actual availability/booking and agenda preparation are unchanged. Updated current instructions/specs/usage notes; older requirements to preserve Schedule are superseded by this explicit removal.
+- Advanced solution to `1.0.0.6` and Teams app to `1.0.5` because the baseline instruction also changed, preserving IDs/schema versions and build version history. `npm run build` passed without TypeScript/lint warnings or errors; the existing test stage found zero tests. No testing infrastructure or live tenant/calendar checks were added/executed.
+- The initial build overlapped the active development server and included development hot-update assets. Rebuilt in an isolated temporary copy using the installed dependencies and preserved version history, then copied the clean sppkg/agent ZIP/version state to the normal project paths. The final archive contains no hot-update/unhashed development component bundles and exactly one agent ZIP. No tenant deployment/sync was performed; runtime checks remain with the user.
+
+### Inline frame content-size notification (2026-11-13)
+
+- User screenshot shows the inline frame clipping results after the first profile. The inline row/header styles have not changed in the recent feature work; no definitive host regression is claimed. Added an inline-only ResizeObserver on the natural React content section, forwarding changed positive dimensions to the public requestSizeChangeAsync entry callback. It disconnects on fullscreen/unmount and ignores disposed callbacks; no fixed height, layout redesign or automatic request loop was introduced.
+- Follows the official access-data guidance for asynchronous content/frame resizing. Solution advanced to `1.0.0.7`; Teams app stays `1.0.5` because baseline metadata/instructions/tools are unchanged. No additional agent synchronization is needed for this component-only change.
+- `npm run build` passed without TypeScript/lint warnings/errors in an isolated temporary source copy, preserving version history and avoiding the active development server's staging files. The existing test stage found zero tests. Clean sppkg/ZIP/version state were copied to the normal project paths; no hot-update assets or duplicate ZIPs are included. Stopped after compilation/packaging; actual three-profile visibility and host height constraints remain for user verification.
+
+### Agenda follow-up routing correction (2026-11-13)
+
+- User reports the visible agenda follow-up followed by a chat-only claim that a review card is ready, with no card displayed. This confirms delivery of the user-role message, not a successful tool invocation/render. Action diagnostics were unavailable to the user; omission, discovery failure and render failure have not been distinguished. No Graph/calendar change or confirmed host root cause is claimed.
+- Confirmed both components and the second tool's properties are registered. The installed generator uses manifest tool names, distinct from component aliases, and documents possible runtime suffixes. Kept dynamic discovery and existing IDs/tool names; no static catalog, alternate transport or generator was added.
+- Shortened the visible follow-up to the meeting-agenda request, exact identifiers and requested review component. Moved the repeated behavioral wording into stronger intent-based baseline routing, with an explicit real-tool-call requirement, suffix-aware selection, actual agenda content, failure wording and no fictitious card/draft completion acknowledgement. Updated tool/plugin/agent descriptions and usage/spec notes.
+- `npm run build` passed without TypeScript/lint warnings/errors in the isolated source copy; no tests were added and the existing stage found zero tests. Copied a clean package with one agent ZIP and no development hot-update files: solution `1.0.0.8`, Teams app `1.0.6`. Baseline sync and a new conversation are required for the instruction change. Stopped after compilation/packaging; whether this changes the real Copilot invocation/rendering behavior remains for user verification.
+
+### Agenda tool catalog fallback after host diagnostics (2026-11-13)
+
+- The user confirms the inline height issue is resolved. Agenda preparation still fails: raw debug info for agent `1.0.6.1` shows empty `matchedFunctionCandidates`, `functionsSelectedForInvocation` and `functionExecutions`. This is evidence of no function match/call in that turn, not a rendering or Graph-save error.
+- Read-only tenant inspection confirmed solution `1.0.0.8` is deployed/enabled. Downloaded its sppkg and confirmed byte equality with the local artifact, both component/tool definitions, and one agent ZIP. It also contained development hot-update assets/unhashed bundles from shared watch/build output. A direct MCP tools/list request returned 404, so the live discovery response/underlying service cause remains unknown. No scopes were granted or tenant state changed.
+- Selected the installed SPFx generator's `toolDiscovery: "static"` fallback. It generates both function definitions and MCP/UI catalog entries from the existing component schemas, retaining the endpoint, identities, names, arguments and read-only invocation semantics. No hand-maintained schema, alternate transport, generator, prompt change or calendar change was added. Future tool/schema updates require baseline sync while this catalog is pinned.
+- `npm run build` passed without TypeScript/lint warnings/errors in an isolated source copy; the existing stage found zero tests and no tests were added. Final solution **1.0.0.9** / app **1.0.7** contains both functions and UI metadata, one embedded agent ZIP and no development assets. Copied clean sppkg/ZIP/version history to the project and kept a stable sppkg at `/private/tmp/expert-finder-1.0.0.9.sppkg`.
+- Stopped after the successful build/package inspection. No deployment/sync, live tool call or calendar write was performed. User must update/enable, Add to Teams, verify app version and retry in a fresh conversation; tool invocation/rendering and full agenda acceptance remain pending.

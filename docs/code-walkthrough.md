@@ -1,5 +1,9 @@
 # Expert Finder: code walkthrough for conference slides
 
+## Meeting agenda extension
+
+The booking service stamps a small event-local property and returns `bookingId` alongside the event ID. The original component publishes a whitelisted `meetingAgenda` snapshot, awaits the Bridge context update, then sends a correlated follow-up. The agent passes generated text to the independent `prepareMeetingAgenda` component; that component has its own React root and GraphMeetingService. Rendering reads the event; explicit Save revalidates organizer/provenance and merges an escaped section into the latest body. An uncertain PATCH has a read-only status action, never a replacement create. This is local source behavior; actual host/calendar behavior remains for user verification.
+
 Based on the deployed repository implementation, reviewed on 2026-11-05. Stack: SPFx 1.24.1, React 18, TypeScript, Fluent UI v9 and Microsoft Graph v1.0.
 
 Use each numbered section as a slide topic. The quoted speaker lines are suggested narration; the code comes from the linked project files. TypeScript/TSX blocks are selected excerpts with surrounding code omitted. JSON blocks show selected properties, and some arrays show one representative item; they are not replacement configuration files.
@@ -418,7 +422,7 @@ const response: unknown = await withTimeout(client.api('/me/events').version('v1
 
 A per-interval promise guard blocks duplicate/in-flight attempts, while `transactionId` protects SDK retries. An uncertain POST outcome asks the user to inspect Outlook instead of automatically creating another invitation. A missing Teams link triggers one read of the existing event.
 
-The existing **Schedule** button remains a labeled preview; real creation is reached from a future Free availability slot and its confirmation dialog.
+Real creation is reached from a future Free availability slot and its confirmation dialog. The obsolete Schedule preview button and dialog have been removed.
 
 **Say:** “The user confirms the action, React calls Graph and the meeting belongs to the signed-in user's calendar.”
 
@@ -624,7 +628,7 @@ For the actual scope-preserving commands and tenant-specific service-principal l
 - Profile photos use UPN; calendars use SMTP email. These are not interchangeable attributes.
 - Graph photos do not establish that a user has an Exchange mailbox or can organize a Teams meeting.
 - Calendar free/busy does not indicate Teams presence.
-- Schedule is a preview. The availability confirmation creates a real invitation. Introduce me requests a draft in Copilot and sends nothing to Teams.
+- The availability confirmation creates a real invitation. Introduce me requests a draft in Copilot and sends nothing to Teams.
 - A local Busy mark means the app created an invitation, not that the expert accepted.
 - SharePoint asset deployment and baseline-agent synchronization are separate update steps.
 
