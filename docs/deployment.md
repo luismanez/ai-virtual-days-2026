@@ -1,8 +1,12 @@
 # Package and install Expert Finder
 
+## Next working day availability
+
+The current release is solution **1.0.0.10**, retaining Teams app **1.0.7**. Availability now offers **Today / Next working day**, skipping weekends and initially selecting the next working day from local 17:30 or on weekends. Each day keeps the existing 09:00–18:00 window and Morning/Afternoon navigation. This changes component code only; the agent baseline, tools, schemas and pinned catalog stay unchanged. Replace/enable the sppkg; no additional **Add to Teams** sync is required when app 1.0.7 is already installed. Build results are recorded in `specs/tasks/todo.md`; runtime booking checks remain with the user.
+
 ## Agenda tool catalog correction
 
-The current release is solution **1.0.0.9** and generated Teams app **1.0.7**. The user's raw debug info for agent `1.0.6.1` has empty `matchedFunctionCandidates`, `functionsSelectedForInvocation` and `functionExecutions`. A read-only download confirmed that deployed solution `1.0.0.8` contains both tools and matches the local package. This places the observed failure before component execution; it does not establish the underlying Microsoft service cause. A direct MCP `tools/list` request returned 404 and could not verify discovery.
+The preceding release is solution **1.0.0.9** and generated Teams app **1.0.7**. The user's raw debug info for agent `1.0.6.1` has empty `matchedFunctionCandidates`, `functionsSelectedForInvocation` and `functionExecutions`. A read-only download confirmed that deployed solution `1.0.0.8` contains both tools and matches the local package. This places the observed failure before component execution; it does not establish the underlying Microsoft service cause. A direct MCP `tools/list` request returned 404 and could not verify discovery. The user subsequently confirmed that the independent agenda review component renders with generated content; saving the agenda to the meeting is still unconfirmed.
 
 This release selects the installed SPFx generator's `toolDiscovery: "static"` fallback in `config/copilot-agent.json`. The generator derives both `functions` and `mcp_tool_description.tools` from the existing component manifests/schemas, with explicit `run_for_functions` entries. The MCP endpoint, component IDs, tools, arguments, instructions and calendar behavior stay the same. No catalog is maintained by hand. This is a deployment correction to test, not a confirmed host fix. Replace/enable the sppkg, run **Add to Teams** to synchronize the changed baseline, verify app **1.0.7** or its generated hotfix version, then start a new conversation. With the pinned catalog, future tool/schema changes also require a baseline update/sync.
 

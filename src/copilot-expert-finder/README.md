@@ -20,7 +20,7 @@ The development server is HTTPS localhost:4321. Open your tenant's Copilot Workb
 - Inline: correct total and up to three experts, portraits, roles, contact and expansion.
 - Inline content-size changes notify the host explicitly after asynchronous results/layout updates, so it can grow the frame to the natural content height. Fullscreen sizing remains host-owned.
 - Fullscreen: responsive cards plus local name-prefix, department and role filters.
-- Check availability opens one selected fullscreen card's calendar timeline for today, 09:00–18:00 in the viewer's local time. Availability loads on selection or Refresh; a future Free slot can open a separate confirmation for a real Teams meeting. Unavailable calendars remain an explicit unavailable state.
+- Check availability opens one selected fullscreen card's calendar timeline for Today or Next working day, 09:00–18:00 in the viewer's local time. The next working day skips weekends; holidays are not considered. Availability loads on selection or Refresh; a future Free slot can open a separate confirmation for a real Teams meeting. Unavailable calendars remain an explicit unavailable state.
 - Clear filters and host mode/theme changes reuse the fetched data.
 - When the root Experts list returns HTTP 404, mock data provides SPFx 6, Copilot 8, DB 1, Spanish 0. Profiles are fictional and visibly labeled.
 - Mock contact is a preview. Live Teams links never send a message.
@@ -35,7 +35,7 @@ Live profile photos use delegated Microsoft Graph through SPFx's MSGraphClientV3
 
 Calendar availability uses `POST /me/calendar/getSchedule` with only the selected expert's SMTP email from the SharePoint Person field. Its 18 half-hour slots show Free, Tentative, Busy or Out of Office with text markers and tooltips. Times are normalized to UTC for Graph and displayed locally. The panel keeps only its active result, ignores stale responses, and clears when another expert is selected, filters hide it, or fullscreen closes. Event details are discarded. Mock mode makes no calendar calls. Recheck the previously observed `Calendars.Read` consent, or follow the guide for `Calendars.ReadBasic` when no compatible permission exists; actual mailbox/policy access still requires a tenant check.
 
-The timeline displays Morning (09:00–14:00, ten slots) or Afternoon (14:00–18:00, eight slots), with arrows disabled at the ends. Blocks are 56 px high and show their start time plus a larger status marker. Each period uses two rows in narrow cards and one row from 600 px of panel width. Initial selection follows the local hour (afternoon from 14:00); Refresh preserves it. Period arrows only slice the already loaded day and make no Graph requests.
+The timeline displays Morning (09:00–14:00, ten slots) or Afternoon (14:00–18:00, eight slots), with arrows disabled at the ends. Blocks are 56 px high and show their start time plus a larger status marker. Each period uses two rows in narrow cards and one row from 600 px of panel width. The day selector defaults to Today, or Next working day on weekends/from 17:30 when no future slot remains today. Next working day starts at Morning; Today starts at Afternoon from 14:00. Changing days loads that day; Refresh preserves the selected day and period. Period arrows only slice the already loaded day and make no Graph requests.
 
 ## Confirmed Teams meetings
 

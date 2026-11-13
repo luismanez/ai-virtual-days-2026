@@ -381,9 +381,9 @@ response = await client.api('/me/calendar/getSchedule').version('v1.0').post({
 });
 ```
 
-**Explain:** A selected card's Check availability action mounts the panel and triggers one read for that expert's SMTP address. The service constructs today's 09:00–18:00 in the viewer's local zone, then sends UTC boundaries with a 30-minute interval. It validates the 18 returned free/busy codes before rendering Free, Tentative, Busy or Out of Office; event details are discarded.
+**Explain:** A selected card's Check availability action mounts the panel and triggers one read for that expert's SMTP address. The service constructs the selected day's 09:00–18:00 in the viewer's local zone, then sends UTC boundaries with a 30-minute interval. It validates the 18 returned free/busy codes before rendering Free, Tentative, Busy or Out of Office; event details are discarded.
 
-Morning/afternoon arrows slice the same loaded day, with no additional Graph call. Refresh reads again. A minute timer updates the current-slot outline without polling Graph. Mock or inaccessible calendars show an unavailable explanation, not simulated slots. Calendar free/busy is distinct from Teams presence.
+Today / Next working day select one queried day, skipping weekends with local calendar arithmetic. From 17:30 or on weekends, the panel initially selects the next working day and Morning. Results are correlated by email and day to suppress stale responses. Morning/afternoon arrows slice the same loaded day, with no additional Graph call. Refresh reads the selected day again. A minute timer updates the current-slot outline without polling Graph. Mock or inaccessible calendars show an unavailable explanation, not simulated slots. Calendar free/busy is distinct from Teams presence.
 
 The [getSchedule permission table](https://learn.microsoft.com/en-us/graph/api/calendar-getschedule?view=graph-rest-1.0#permissions) lists delegated `Calendars.ReadBasic` and compatible higher calendar scopes.
 
